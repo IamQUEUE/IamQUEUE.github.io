@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas로 이미지 파일 읽어 들이기</title>
+    <style>
+        canvas {
+            border: 2px solid gray;
+        }
+    </style>
+    <script>
+        function makeRandom(min, max) {
+            var RandVal = Math.floor(Math.random() * (max - min + 1)) + min;
+            return RandVal;
+        }
+        var score = 0;
+        var x;
+        var y;
+        var birdWidth;
+        var birdHeight;
+        var img;
+        var ctx;
+        var canvas;
+        var timer = 30;
+        var state = 0;
+        var timeShow;
+        var intervalTimer;
+        var now;
+        function resetBird(event) {
+            if (state === 2) {
+                alert('시간 제한이 끝났습니다. 누르지 마세요');
+                return;
+            }
+            if (state === 0) {
+                now = new Date();
+                state = 1;
+                intervalTimer = setInterval(() => {
+                    if (timer > 0) {
+                        timer = 30 - (new Date() - now).toFixed(2) / 1000;
+                        console.log(timer);
+                        timeShow.innerHTML = timer;
+                    }
+                    else {
+                        state = 2;
+                        clearInterval(intervalTimer);
+                    }
+                    console.log(timer);
+                }, 100);
+            }
+            var cur_x = event.clientX;
+            var cur_y = event.clientY;
+            if (x < cur_x && cur_x < x + birdWidth && y < cur_y && cur_y < y + birdHeight) {
+                console.log(
+                    ctx
+                )
+                ctx.clearRect(0, 0, 1500, 600);
+                x = makeRandom(0, 1500 - birdWidth);
+                y = makeRandom(0, 600 - birdHeight);
+                ctx.drawImage(img, x, y, birdWidth, birdHeight);
+                score = score + 1;
+                document.getElementById("score").innerHTML = score;
+            }
+        }
+        window.onload = function () {
+            // canvas 요소의 객체 가져오기
+            canvas = document.getElementById("mycanvas");
+            // canvas의 그리기 컨텍스트 가져오기
+            ctx = canvas.getContext("2d");
+            // 이미지 객체 생성하기
+            img = new Image();
+            // 이미지를 읽어 들인 후, canvas에 그리기
+            // 이미지의 소스를 URL로 지정
+            img.src = "images/sadBird.jpg";
+
+            img.onload = function () {
+                birdWidth = img.width / 2;
+                birdHeight = img.height / 2;
+                x = makeRandom(0, 1500 - birdWidth);
+                y = makeRandom(0, 600 - birdHeight);
+                ctx.drawImage(img, x, y, birdWidth, birdHeight);
+            };
+
+            timeShow = document.getElementById('time');
+        }
+    </script>
+</head>
+<body>
+    <canvas id="mycanvas" width="1500" height="600" onclick="javascript:resetBird(event)"> </canvas>
+    <p id="score"></p>
+    <p id="time"></p>
+</body>
+</html>

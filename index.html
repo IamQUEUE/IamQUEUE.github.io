@@ -29,6 +29,7 @@
         var now;
         var fake_x = [];
         var fake_y = [];
+        var twitMessage=["잔상이죠?", "못 잡았죠?", "열받죠?","손 느리죠?"]
         function resetBird(event) {
             if (state === 2) {
                 alert('시간 제한이 끝났습니다. 누르지 마세요');
@@ -54,7 +55,8 @@
             var cur_y = event.clientY;
             for (var i = 0; i < score/4; i++) {
                 if (fake_x[i] < cur_x && cur_x < fake_x[i] + birdWidth && fake_y[i] < cur_y && cur_y < fake_y[i] + birdHeight) {
-                    alert('잔상이죠?');
+                    k=makeRandom(0, 3);
+                    alert(twitMessage[k]);
                 }
             }
             if (x < cur_x && cur_x < x + birdWidth && y < cur_y && cur_y < y + birdHeight) {
@@ -74,9 +76,6 @@
                     ctx.strokeStyle = "red";
                     ctx.strokeRect(fake_x[i], fake_y[i], birdWidth, birdHeight);
                 }
-
-
-
 
                 score = score + 1;
                 document.getElementById("score").innerHTML = score;

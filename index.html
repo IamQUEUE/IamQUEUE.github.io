@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Click the Bird!</title>
@@ -21,11 +22,13 @@
         var img;
         var ctx;
         var canvas;
-        var timer = 30;
+        var timer=1;
         var state = 0;
         var timeShow;
         var intervalTimer;
         var now;
+        var fake_x = [];
+        var fake_y = [];
         function resetBird(event) {
             if (state === 2) {
                 alert('시간 제한이 끝났습니다. 누르지 마세요');
@@ -36,7 +39,7 @@
                 state = 1;
                 intervalTimer = setInterval(() => {
                     if (timer > 0) {
-                        timer = 30 - (new Date() - now).toFixed(2) / 1000;
+                        timer = 50 - (new Date() - now).toFixed(2) / 1000;
                         console.log(timer);
                         timeShow.innerHTML = timer;
                     }
@@ -49,17 +52,36 @@
             }
             var cur_x = event.clientX;
             var cur_y = event.clientY;
+            for (var i = 0; i < score/4; i++) {
+                if (fake_x[i] < cur_x && cur_x < fake_x[i] + birdWidth && fake_y[i] < cur_y && cur_y < fake_y[i] + birdHeight) {
+                    alert('잔상이죠?');
+                }
+            }
             if (x < cur_x && cur_x < x + birdWidth && y < cur_y && cur_y < y + birdHeight) {
-                console.log(
-                    ctx
-                )
+
                 ctx.clearRect(0, 0, 1500, 600);
                 x = makeRandom(0, 1500 - birdWidth);
                 y = makeRandom(0, 600 - birdHeight);
                 ctx.drawImage(img, x, y, birdWidth, birdHeight);
+
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "blue";
+                ctx.strokeRect(x, y, birdWidth, birdHeight);
+                for (var i = 0; i < score/4; i++) {
+                    fake_x[i] = makeRandom(0, 1500 - birdWidth);
+                    fake_y[i] = makeRandom(0, 600 - birdHeight);
+                    ctx.drawImage(img, fake_x[i], fake_y[i], birdWidth, birdHeight);
+                    ctx.strokeStyle = "red";
+                    ctx.strokeRect(fake_x[i], fake_y[i], birdWidth, birdHeight);
+                }
+
+
+
+
                 score = score + 1;
                 document.getElementById("score").innerHTML = score;
             }
+
         }
         window.onload = function () {
             // canvas 요소의 객체 가져오기
@@ -78,17 +100,23 @@
                 x = makeRandom(0, 1500 - birdWidth);
                 y = makeRandom(0, 600 - birdHeight);
                 ctx.drawImage(img, x, y, birdWidth, birdHeight);
+                ctx.lineWidth = 5;
+                ctx.strokeStyle = "blue";
+                ctx.strokeRect(x, y, birdWidth, birdHeight);
             };
 
             timeShow = document.getElementById('time');
         }
     </script>
 </head>
+
 <body>
 
-    <canvas id="mycanvas" width="1500" height="600" onclick="javascript:resetBird(event)" style="cursor:crosshair"> </canvas>
+    <canvas id="mycanvas" width="1500" height="600" onclick="javascript:resetBird(event)" style="cursor:crosshair">
+    </canvas>
     <h1>CLICK THE BIRD!!!</h1>
     <p id="score"></p>
     <p id="time"></p>
 </body>
+
 </html>

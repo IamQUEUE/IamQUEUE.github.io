@@ -39,7 +39,7 @@
         let res;
 
         try {
-          res = await fetch("http://tmdflqdnl.cafe24.com/readScore.php", {
+          res = await fetch("https://tmdflqdnl.cafe24.com/readScore.php", {
             mode: "cors",
           });
         } catch (e) {
@@ -75,7 +75,7 @@
               clearInterval(intervalTimer);
               (async () => {
                 await fetch(
-                  `http://tmdflqdnl.cafe24.com/writeScore.php?score=${score}`,
+                  `https://tmdflqdnl.cafe24.com/writeScore.php?score=${score}`,
                   {
                     mode: "cors",
                   }
